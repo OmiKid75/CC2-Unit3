@@ -1,0 +1,176 @@
+NAME: NAOMI ZEPHANIA
+UID: 24BDA70345
+DATE: 30-10-2026
+
+EXPERIMENT 3.1.1: CLIMBING STAIRS
+CODES;
+class Solution {
+public:
+    int climbStairs(int n) {
+    
+        if (n <= 2) return n;
+         int prev1 = 1, prev2 = 2; // ways(1), ways(2)
+        for (int i = 3; i <= n; i++) {
+          int current = prev1 + prev2;
+          prev1 = prev2;
+          prev2 = current;
+    } 
+ return prev2;
+    }
+};
+
+EXPERIMENT 3.1.2 (FROG JUMP)
+CODES;
+
+class Solution {
+public:
+    bool canCross(vector<int>& stones) {
+        int n = stones.size();
+        
+        unordered_map<int, unordered_set<int>> dp;
+        dp[0].insert(0);
+        for (int stone : stones) {
+            for (int k : dp[stone]) {
+                for (int jump = k - 1; jump <= k + 1; jump++) {
+                    if (jump > 0) {
+                        int nextStone = stone + jump;
+                        dp[nextStone].insert(jump);
+                    }
+                }
+            }
+        }
+        return !dp[stones[n - 1]].empty();
+    }
+};
+
+
+EXPERIMENT 3.2.1 (COIN CHANGE)
+CODES;
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+    
+       vector<int> dp(amount + 1, amount + 1);
+         dp[0] = 0;
+       for (int a = 1; a <= amount; a++) {
+       for (int c : coins) {
+         if (c <= a) {
+           dp[a] = min(dp[a], dp[a - c] + 1);
+  
+    }
+    
+    }
+    }
+ 
+     return dp[amount] <= amount ? dp[amount] : -1;
+    }
+     };
+
+EXPERIMENT 3.2.2 (LCS)
+CODES:
+
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int m = text1.size();
+        int n = text2.size();
+
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+
+                if (text1[i - 1] == text2[j - 1]) {
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                }
+                else {
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+    };
+
+  EXPERIMENT 3.3.1 (NUMBER OF ISLANDS)
+  CODES:
+  
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        int count = 0;
+
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+
+                if (grid[r][c] == '1') {
+                    dfs(grid, r, c, m, n);
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+private:
+    void dfs(vector<vector<char>>& grid,
+             int r, int c, int m, int n) {
+
+        if (r < 0 || r >= m || c < 0 || c >= n ||
+            grid[r][c] != '1')
+            return;
+
+        grid[r][c] = '0';
+
+        dfs(grid, r - 1, c, m, n); // Up
+        dfs(grid, r + 1, c, m, n); // Down
+        dfs(grid, r, c - 1, m, n); // Left
+        dfs(grid, r, c + 1, m, n); // Right
+    }
+    };
+
+EXPERIMENT 3.3.2(Find If Path Exists in a Graph)
+CODE:
+
+class Solution {
+public:
+    bool validPath(int n, vector<vector<int>>& edges,
+                   int source, int destination) {
+
+        vector<vector<int>> adj(n);
+
+        // Build an undirected graph
+        for (auto &e : edges) {
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+
+        vector<bool> visited(n, false);
+        queue<int> q;
+
+        q.push(source);
+        visited[source] = true;
+
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+
+            if (node == destination)
+                return true;
+
+            for (int nbr : adj[node]) {
+                if (!visited[nbr]) {
+                    visited[nbr] = true;
+                    q.push(nbr);
+                }
+            }
+        }
+
+        return false;
+    }
+    };
+
